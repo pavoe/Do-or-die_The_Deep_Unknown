@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour
     {
         grounded = isGrounded();
 
-        if (grounded && Input.GetButton("Jump")&&innerCollider.IsTouching(GameObject.Find("Walls").GetComponent<CompositeCollider2D>()))
+        if (grounded && Input.GetButton("Jump")&&innerCollider.IsTouching(GameController.CurrentLevel.GetComponent<CompositeCollider2D>()))
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
 
 
