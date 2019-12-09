@@ -38,15 +38,15 @@ public class PlayerController : MonoBehaviour
 	void Update()
     {
         grounded = isGrounded();
-
-        if (grounded && Input.GetButton("Jump")&&innerCollider.IsTouching(GameController.CurrentLevel.GetComponent<CompositeCollider2D>()))
+ 
+        if (grounded && Input.GetButton("Jump") && innerCollider.IsTouching(GameObject.Find("Environment").GetComponent<CompositeCollider2D>()))
+        {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+        }
+          
 
 
         if (Input.GetKey(KeyCode.Escape)) Application.Quit();
-
-
-        //do dopracowania
       
     }
     
