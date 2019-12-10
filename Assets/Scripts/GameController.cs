@@ -6,8 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
-    private int score;
-    private int scoreLimit;
+    //private int score;
+    //private int scoreLimit;
 
     
 

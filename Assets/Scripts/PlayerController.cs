@@ -13,12 +13,14 @@ public class PlayerController : MonoBehaviour
     
     private Rigidbody2D rb;
     private BoxCollider2D boxCollider;
+    private BoxCollider2D innerCollider;
 
 	// Start is called before the first frame update
 	void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
+        innerCollider = GetComponentInChildren<BoxCollider2D>();
     }
 
 	// FixedUpdate is called every fixed frame-rate frame, use it when using Rigidbody
@@ -36,23 +38,16 @@ public class PlayerController : MonoBehaviour
 	void Update()
     {
         grounded = isGrounded();
-
-        if (grounded && Input.GetButton("Jump"))
+ 
+        if (grounded && Input.GetButton("Jump") && innerCollider.IsTouching(GameObject.Find("Environment").GetComponent<CompositeCollider2D>()))
+        {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+        }
+          
 
 
         if (Input.GetKey(KeyCode.Escape)) Application.Quit();
-
-
-        //do dopracowania
-        if (!grounded && rb.velocity.y > 0)
-        {
-            boxCollider.enabled = false;
-        }
-        else
-        {
-            boxCollider.enabled = true;
-        }
+      
     }
     
 	private void OnTriggerEnter2D( Collider2D collision )
