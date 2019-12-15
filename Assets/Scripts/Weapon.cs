@@ -18,7 +18,7 @@ public class Weapon : MonoBehaviour
     /// <summary>
     /// Shooting mechanism.
     /// </summary>
-    void Shoot()
+    public void Shoot()
     {
         Instantiate(bulletPrefab, firePoint.position, firePoint.rotation); //chcemy jedynie zespawnować pocisk
     }
