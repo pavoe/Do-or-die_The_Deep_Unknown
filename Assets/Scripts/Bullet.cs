@@ -5,7 +5,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public float speed = 20f;
-    //public int damage = 40;
+    public int damage = 40;
     public Rigidbody2D rb;
 
     // Start is called before the first frame update
@@ -19,12 +19,12 @@ public class Bullet : MonoBehaviour
         //Debug.Log(hitInfo.name); //wyświetlanie w konsoli informacji o tym, na jaki collider natrafia pocisk
 
         //ZADAWANIE OBRAŻEŃ WROGOWI
-        //Enemy enemy = hitInfo.GetComponent<Enemy>();
-        //if (enemy != null)  //jeśli znaleźliśmy komponent <Enemy>
-        //{
-        //    enemy.TakeDamage(damage); //zadajemy obrażenia
-        //}
-
+        Character hitTarget = hitInfo.GetComponent<Character>();
+        if (hitTarget != null) 
+        {
+            hitTarget.dealDamage(damage); //zadajemy obrażenia
+        }
+        
         Destroy(gameObject); //niszczy pocisk po trafieniu w coś
     }
 }
