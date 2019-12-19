@@ -25,15 +25,15 @@ public class KeyboardMouseController : MonoBehaviour
  
         if (Input.GetKey(KeyCode.W))
         {
-            GameController.gameController.PC.GetComponent<Character>().Jump();
+            GameController.gameController.PlayerCharacter.GetComponent<Character>().Jump();
         }
 
         float moveInput = Input.GetAxis("Horizontal");
-        GameController.gameController.PC.GetComponent<Character>().Move(moveInput);
+        GameController.gameController.PlayerCharacter.GetComponent<Character>().Move(moveInput);
 
         if (Input.GetButtonDown("Fire3"))
         {
-            GameController.gameController.PC.GetComponent<Weapon>().Shoot();
+            GameController.gameController.PlayerCharacter.GetComponent<Weapon>().Shoot();
         }
            
 

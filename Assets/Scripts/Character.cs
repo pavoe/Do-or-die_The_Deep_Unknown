@@ -79,7 +79,7 @@ public class Character : MonoBehaviour
     {
         if (damage > HP)
         {
-            if (gameObject.Equals(GameController.gameController.PC))
+            if (gameObject.Equals(GameController.gameController.PlayerCharacter))
             {
                 //GAME OVER
             }

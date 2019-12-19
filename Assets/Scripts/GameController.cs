@@ -16,9 +16,11 @@ public class GameController : MonoBehaviour
     /// Holds the reference to the Level the player is currently on.
     /// </summary>
     public static GameObject ActiveLevel { get; protected set; }
-    //TODO: Fix this for Serializing Characters - GameController should load a player character form a file
-    //for now done through the inspector.
-    public  GameObject PC;
+
+    /// <summary>
+    /// This holds the reference to the player character Game Object
+    /// </summary>
+    public  GameObject PlayerCharacter;
 
 
     // Start is called before the first frame update
