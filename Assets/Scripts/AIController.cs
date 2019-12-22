@@ -18,7 +18,7 @@ public class AIController : MonoBehaviour
         float distance = Vector3.Distance(player.transform.position, enemy.transform.position);
         if (distance <= 30)
         {
-            Shoot();
+            //Shoot();
         }
         
         //Nie wiem, może da się coś zrobić, żeby Shoot dla Weapon działało też tu, public przy weapon nie zadziałało
