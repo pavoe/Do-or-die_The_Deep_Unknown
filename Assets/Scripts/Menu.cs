@@ -28,15 +28,11 @@ public class Menu : MonoBehaviour
         Time.timeScale = 0; //zatrzymanie czasu
         Cursor.visible = mainMenu.enabled; //odkrycie kursora myszy
         Cursor.lockState = CursorLockMode.Confined; //odblokowanie kursora myszy
-        //przetestować z CursorLockMode.None
-        //przetestować bez ostatniej linijki
     }
 
     // Update is called once per frame
     void Update()
     {
-        //tutaj będzie kod dotyczący sprawdzania czy przypadkiem gracz nie wcisnął P aby zapauzować grę
-        //ewentualnie w KeyboardMouseController ?
     }
 
     public void btnPlayPressed()
