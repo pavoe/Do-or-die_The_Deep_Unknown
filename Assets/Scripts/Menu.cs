@@ -6,27 +6,46 @@ using UnityEngine.SceneManagement;
 
 public class Menu : MonoBehaviour
 {
-    public Canvas quitMenu;
-    public Canvas pauseMenu;
-    public Canvas quitMenuAfterPause;
+    public GameObject quitMenu;
+    public GameObject pauseMenu;
+    public GameObject quitMenuAfterPause;
     public Button btnPlay;
     public Button btnExit;
-    private Canvas mainMenu;
+    private GameObject mainMenu;
 
     // Start is called before the first frame update
     void Start()
     {
-        mainMenu = (Canvas)GetComponent<Canvas>(); //pobranie menu głównego
-        quitMenu = quitMenu.GetComponent<Canvas>(); //pobranie menu wyjścia z gry
-        pauseMenu = pauseMenu.GetComponent<Canvas>(); //pobranie menu pauzy
-        quitMenuAfterPause = quitMenuAfterPause.GetComponent<Canvas>(); //pobranie menu wyjścia z gry po pauzie
+        GameController.menu = this;
+
+        foreach (Transform child in transform)
+        {
+            switch (child.name)
+            {
+                case "MainMenu":
+                    mainMenu = child.gameObject;   //pobranie menu głównego
+                    break;
+                case "QuitMenu":
+                    quitMenu = child.gameObject; //pobranie menu wyjścia z gry
+                    break;
+                case "PauseMenu":
+                    pauseMenu = child.gameObject; //pobranie menu pauzy
+                    break;
+                case "QuitMenuAfterPause":
+                    quitMenuAfterPause = child.gameObject; //pobranie menu wyjścia z gry po pauzie
+                    break;
+            }
+
+
+        }
+     
         btnPlay = btnPlay.GetComponent<Button>();
         btnExit = btnExit.GetComponent<Button>();
-        quitMenu.enabled = false; //wyłączenie menu wyjścia z gry
-        pauseMenu.enabled = false;
-        quitMenuAfterPause.enabled = false;
+        quitMenu.SetActive(false);//wyłączenie menu wyjścia z gry
+        pauseMenu.SetActive(false);
+        quitMenuAfterPause.SetActive(false);
         Time.timeScale = 0; //zatrzymanie czasu
-        Cursor.visible = mainMenu.enabled; //odkrycie kursora myszy
+        Cursor.visible = mainMenu.activeSelf; //odkrycie kursora myszy
         Cursor.lockState = CursorLockMode.Confined; //odblokowanie kursora myszy
     }
 
@@ -37,7 +56,7 @@ public class Menu : MonoBehaviour
 
     public void btnPlayPressed()
     {
-        mainMenu.enabled = false;
+        mainMenu.SetActive(false);
         Time.timeScale = 1; //włączenie czasu
         Cursor.visible = false; //ukrycie kursora
         Cursor.lockState = CursorLockMode.Locked; //zablokowanie kursora
@@ -46,8 +65,8 @@ public class Menu : MonoBehaviour
 
     public void btnExitPressed()
     {
-        quitMenu.enabled = true; //aktywacja menu wyjścia
-        mainMenu.enabled = false; //dezaktywacja menu głównego
+        quitMenu.SetActive(true); //aktywacja menu wyjścia
+        mainMenu.SetActive(false); //dezaktywacja menu głównego
         btnPlay.enabled = false; //dezaktywacja btnPlay
         btnExit.enabled = false; //dezaktywacja btnExit
     }
@@ -59,23 +78,25 @@ public class Menu : MonoBehaviour
 
     public void btnCancelExitPressed()
     {
-        mainMenu.enabled = true; //aktywacja menu głównego
-        quitMenu.enabled = false; //dezaktywacja menu wyjścia
+        mainMenu.SetActive(true); //aktywacja menu głównego
+        quitMenu.SetActive(false); //dezaktywacja menu wyjścia
         btnPlay.enabled = true; //aktywacja btnPlay
         btnExit.enabled = true; //aktywacja btnExit
     }
 
     public void showPauseMenu()
     {
-        pauseMenu.enabled = true; //aktywacja menu pauzy
+        Debug.Log("I am here");
+
+        Cursor.lockState = CursorLockMode.Confined; //odblokowanie kursora
+        pauseMenu.SetActive(true); //aktywacja menu pauzy
         Time.timeScale = 0; //zatrzymanie czasu
         Cursor.visible = true; //odkrycie kursora
-        Cursor.lockState = CursorLockMode.Confined; //odblokowanie kursora
     }
 
     public void btnResumeInPauseMenu()
     {
-        pauseMenu.enabled = false;
+        pauseMenu.SetActive(false);
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         Time.timeScale = 1;
@@ -83,7 +104,7 @@ public class Menu : MonoBehaviour
 
     public void btnRestartInPauseMenu()
     {
-        pauseMenu.enabled = false;
+        pauseMenu.SetActive(false);
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         SceneManager.LoadScene(0);
@@ -92,8 +113,8 @@ public class Menu : MonoBehaviour
 
     public void btnExitInPauseMenu()
     {
-        quitMenuAfterPause.enabled = true; //aktywacja menu wyjścia po pauzie
-        pauseMenu.enabled = false; //dezaktywacja menu pauzy
+        quitMenuAfterPause.SetActive(true); //aktywacja menu wyjścia po pauzie
+        pauseMenu.SetActive(false); //dezaktywacja menu pauzy
     }
 
     public void btnYesInQuitMenuAfterPause()
@@ -103,7 +124,7 @@ public class Menu : MonoBehaviour
 
     public void btnCancelInQuitMenuAfterPause()
     {
-        pauseMenu.enabled = true; //aktywania menu pauzy
-        quitMenuAfterPause.enabled = false; //dezaktywacja menu wyjścia po pauzie
+        pauseMenu.SetActive(true); //aktywania menu pauzy
+        quitMenuAfterPause.SetActive(false); //dezaktywacja menu wyjścia po pauzie
     }
 }
