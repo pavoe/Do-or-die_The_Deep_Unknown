@@ -38,7 +38,6 @@ public class Menu : MonoBehaviour
 
 
         }
-     
         btnPlay = btnPlay.GetComponent<Button>();
         btnExit = btnExit.GetComponent<Button>();
         quitMenu.SetActive(false);//wyłączenie menu wyjścia z gry
@@ -46,7 +45,7 @@ public class Menu : MonoBehaviour
         quitMenuAfterPause.SetActive(false);
         Time.timeScale = 0; //zatrzymanie czasu
         Cursor.visible = mainMenu.activeSelf; //odkrycie kursora myszy
-        Cursor.lockState = CursorLockMode.Confined; //odblokowanie kursora myszy
+        //Cursor.lockState = CursorLockMode.Confined; //odblokowanie kursora myszy  TEMPORARY COMMENTED (everywhere below also)
     }
 
     // Update is called once per frame
@@ -59,7 +58,7 @@ public class Menu : MonoBehaviour
         mainMenu.SetActive(false);
         Time.timeScale = 1; //włączenie czasu
         Cursor.visible = false; //ukrycie kursora
-        Cursor.lockState = CursorLockMode.Locked; //zablokowanie kursora
+        //Cursor.lockState = CursorLockMode.Locked; //zablokowanie kursora
         btnPlay.enabled = true; //aktywacja przycisku btnPlay
     }
 
@@ -86,19 +85,17 @@ public class Menu : MonoBehaviour
 
     public void showPauseMenu()
     {
-        Debug.Log("I am here");
-
-        Cursor.lockState = CursorLockMode.Confined; //odblokowanie kursora
         pauseMenu.SetActive(true); //aktywacja menu pauzy
         Time.timeScale = 0; //zatrzymanie czasu
         Cursor.visible = true; //odkrycie kursora
+        //Cursor.lockState = CursorLockMode.Confined; //odblokowanie kursora
     }
 
     public void btnResumeInPauseMenu()
     {
         pauseMenu.SetActive(false);
         Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.lockState = CursorLockMode.Locked;
         Time.timeScale = 1;
     }
 
@@ -106,7 +103,7 @@ public class Menu : MonoBehaviour
     {
         pauseMenu.SetActive(false);
         Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.lockState = CursorLockMode.Locked;
         SceneManager.LoadScene(0);
         Time.timeScale = 1;
     }
