@@ -21,12 +21,6 @@ public class AIController : MonoBehaviour
     // Update is called once per frame
     private void CheckLineOfFire(GameObject enemy)
     {
-        //sprawdzam czy odległość gracza od enemy jest odpowiednia
-        //sprawdza co ma, jeśli gracz jest na linii strzału woła  
-        //strzał. 
-        //Coś w stylu  
-        //enemy.GetComponent<Weapon>().Shoot(); 
-        //tutaj powinny być te Raycasty
         if (pcedistance<=30)
         {
             //Tutaj Raycastować
@@ -46,9 +40,7 @@ public class AIController : MonoBehaviour
                 CheckLineOfFire(enemy);
             }
         }
-        //float distance = Vector3.Distance(player.transform.position, enemy.transform.position);
         
-        //Nie wiem, może da się coś zrobić, żeby Shoot dla Weapon działało też tu, public przy weapon nie zadziałało
     }
     
 }
