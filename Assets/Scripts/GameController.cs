@@ -8,7 +8,7 @@ public class GameController : MonoBehaviour
 {
 
     public static  GameController gameController { get; private set; }
-
+    public static Menu menu;
 
 
     public float timeStopSpeed = 0.01f;

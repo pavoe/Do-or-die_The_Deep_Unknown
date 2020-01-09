@@ -31,14 +31,18 @@ public class KeyboardMouseController : MonoBehaviour
         float moveInput = Input.GetAxis("Horizontal");
         GameController.gameController.PC.GetComponent<Character>().Move(moveInput);
 
-        if (Input.GetButtonDown("Fire3"))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             GameController.gameController.PC.GetComponent<Weapon>().Shoot();
         }
-           
+        
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            GameController.menu.showPauseMenu();
+        }
 
 
-        if (Input.GetKey(KeyCode.Escape)) Application.Quit();
+        //if (Input.GetKey(KeyCode.Escape)) Application.Quit();
       
     }
     
