@@ -35,11 +35,7 @@ public class KeyboardMouseController : MonoBehaviour
         {
             GameController.gameController.PC.GetComponent<Weapon>().Shoot();
         }
-        
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            GameController.menu.showPauseMenu();
-        }
+           
 
 
         //if (Input.GetKey(KeyCode.Escape)) Application.Quit();

@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class AIController : MonoBehaviour
 {
-    public GameObject enemy = GameObject.Find("Enemy");
-    public GameObject player = GameController.gameController.PC;
-    List<enemy> enemies = new List<enemy>(); //Jakoś inaczej tę deklarację klasy, enemy nie jest typem, więc trzeba inaczej (ale nie wiem jeszcze jak)
-    private Vector3 cvcedistance = focusObject.transform.position - enemy.transform.position;
-    public float pcedistance = Vector3.Distance(player.transform.position, enemy.transform.position);
+
+    List<GameObject> enemies = new List<GameObject>(); //Jakoś inaczej tę deklarację klasy, enemy nie jest typem, więc trzeba inaczej (ale nie wiem jeszcze jak)
+    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,27 +20,53 @@ public class AIController : MonoBehaviour
     // Update is called once per frame
     private void CheckLineOfFire(GameObject enemy)
     {
-        if (pcedistance<=30)
+        Vector3 direction = new Vector3();
+        Vector3 origin = enemy.transform.position;
+
+        if (enemy.transform.position.x > GameController.gameController.PC.transform.position.x) //sprawdza czy gracz jest po lewej czy prawej
         {
-            //Tutaj Raycastować
-            if (Physics.RayCast(transform.position, Vector3.right, 30)||Physics.RayCast(transform.position, Vector3.left, 30)) //zrobić to eleganciej
-            {
-                enemy.GetComponent<Weapon>().Shoot();
-            }
+            direction = Vector3.left;
+            origin -= (new Vector3(enemy.GetComponent<BoxCollider2D>().size.x, 0));
         }
+        else
+        {
+            direction = Vector3.right;
+            origin += (new Vector3(enemy.GetComponent<BoxCollider2D>().size.x, 0));
+
+        }
+
+        
+
+
+
+
+
+        RaycastHit2D hitinfo = Physics2D.Raycast(origin, direction);
+
+        if(enemy.name=="Enemy1 (1)")
+        {
+            Debug.Log(hitinfo.collider);
+        }
+
+        //Tutaj Raycastować
+        if (hitinfo.transform.name=="Player") //zrobić to eleganciej
+        {
+            Debug.Log(enemy.name);
+            enemy.GetComponent<Weapon>().Shoot();
+        }
+
 
     } 
     void Update()
     {
-        if (cvcedistance<=CameraController.followDistance)
+        foreach (GameObject enemy in enemies)
         {
-            foreach(GameObject enemy in enemies)
+            if (enemy.GetComponentInChildren<SpriteRenderer>().isVisible)
             {
                 CheckLineOfFire(enemy);
             }
         }
-        
+
     }
     
 }
-
