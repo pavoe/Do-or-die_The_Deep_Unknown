@@ -51,7 +51,8 @@ public class Character : MonoBehaviour
     /// </summary>
     public void Jump()
     {
-        if (isGrounded() && innerCollider.IsTouching(GameObject.Find("Environment").GetComponent<CompositeCollider2D>()))
+        if (isGrounded() && (innerCollider.IsTouching(GameObject.Find("Environment").GetComponent<CompositeCollider2D>())
+            || innerCollider.IsTouching(GameObject.Find("Platforms").GetComponent<CompositeCollider2D>())))
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
         }
