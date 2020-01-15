@@ -9,15 +9,14 @@ public class Menu : MonoBehaviour
     public GameObject quitMenu;
     public GameObject pauseMenu;
     public GameObject quitMenuAfterPause;
-    public Button btnPlay;
-    public Button btnExit;
     private GameObject mainMenu;
+    public GameObject gameOver;
+    public GameObject quitMenuAfterGameOver;
 
     // Start is called before the first frame update
     void Start()
     {
         GameController.menu = this;
-
         foreach (Transform child in transform)
         {
             switch (child.name)
@@ -35,14 +34,12 @@ public class Menu : MonoBehaviour
                     quitMenuAfterPause = child.gameObject; //pobranie menu wyjścia z gry po pauzie
                     break;
             }
-
-
         }
-        btnPlay = btnPlay.GetComponent<Button>();
-        btnExit = btnExit.GetComponent<Button>();
         quitMenu.SetActive(false);//wyłączenie menu wyjścia z gry
         pauseMenu.SetActive(false);
         quitMenuAfterPause.SetActive(false);
+        gameOver.SetActive(false);
+        quitMenuAfterGameOver.SetActive(false);
         Time.timeScale = 0; //zatrzymanie czasu
         Cursor.visible = mainMenu.activeSelf; //odkrycie kursora myszy
         //Cursor.lockState = CursorLockMode.Confined; //odblokowanie kursora myszy  TEMPORARY COMMENTED (everywhere below also)
@@ -59,15 +56,12 @@ public class Menu : MonoBehaviour
         Time.timeScale = 1; //włączenie czasu
         Cursor.visible = false; //ukrycie kursora
         //Cursor.lockState = CursorLockMode.Locked; //zablokowanie kursora
-        btnPlay.enabled = true; //aktywacja przycisku btnPlay
     }
 
     public void btnExitPressed()
     {
         quitMenu.SetActive(true); //aktywacja menu wyjścia
         mainMenu.SetActive(false); //dezaktywacja menu głównego
-        btnPlay.enabled = false; //dezaktywacja btnPlay
-        btnExit.enabled = false; //dezaktywacja btnExit
     }
 
     public void btnYesExitPressed()
@@ -79,8 +73,6 @@ public class Menu : MonoBehaviour
     {
         mainMenu.SetActive(true); //aktywacja menu głównego
         quitMenu.SetActive(false); //dezaktywacja menu wyjścia
-        btnPlay.enabled = true; //aktywacja btnPlay
-        btnExit.enabled = true; //aktywacja btnExit
     }
 
     public void showPauseMenu()
@@ -123,5 +115,24 @@ public class Menu : MonoBehaviour
     {
         pauseMenu.SetActive(true); //aktywania menu pauzy
         quitMenuAfterPause.SetActive(false); //dezaktywacja menu wyjścia po pauzie
+    }
+
+    public void showGameOverScreen()
+    {
+        gameOver.SetActive(true);
+        Cursor.visible = true;
+        //Cursor.lockState = CursorLockMode.Confined;
+    }
+
+    public void btnQuitInGameOver()
+    {
+        quitMenuAfterGameOver.SetActive(true);
+        gameOver.SetActive(false);
+    }
+
+    public void btnCancelInQuitMenuAfterGameOver()
+    {
+        quitMenuAfterGameOver.SetActive(false);
+        gameOver.SetActive(true);
     }
 }

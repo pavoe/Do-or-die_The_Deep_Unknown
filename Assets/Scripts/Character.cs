@@ -18,7 +18,7 @@ public class Character : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        
         //TEMPORARY FOR TESTING
         HP = 100;
 
@@ -32,8 +32,11 @@ public class Character : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-      
-       
+        if (innerCollider.IsTouching(GameObject.Find("Abyss").GetComponent<CompositeCollider2D>()))
+        {
+            
+            Debug.Log("Touched.");
+        }
     }
 
 
