@@ -25,21 +25,17 @@ public class AIController : MonoBehaviour
 
         if (enemy.transform.position.x > GameController.gameController.PC.transform.position.x) //sprawdza czy gracz jest po lewej czy prawej
         {
+            enemy.transform.rotation = Quaternion.Euler(0,0,0);
             direction = Vector3.left;
             origin -= (new Vector3(enemy.GetComponent<BoxCollider2D>().size.x, 0));
         }
         else
         {
+            enemy.transform.rotation = Quaternion.Euler(0, 180, 0);
             direction = Vector3.right;
             origin += (new Vector3(enemy.GetComponent<BoxCollider2D>().size.x, 0));
 
         }
-
-        
-
-
-
-
 
         RaycastHit2D hitinfo = Physics2D.Raycast(origin, direction);
 
