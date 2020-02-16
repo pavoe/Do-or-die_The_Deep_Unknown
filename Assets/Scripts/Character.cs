@@ -18,7 +18,7 @@ public class Character : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        
         //TEMPORARY FOR TESTING
         HP = 100;
 
@@ -32,8 +32,7 @@ public class Character : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-      
-       
+        OnTriggerEnter2D(boxCollider);
     }
 
 
@@ -97,4 +96,11 @@ public class Character : MonoBehaviour
         }
     }
 
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.name == "Abyss1" || collision.gameObject.name == "Abyss2" || collision.gameObject.name == "Abyss3")
+        {
+            GameController.menu.showGameOverScreen();
+        }
+    }
 }

@@ -19,13 +19,15 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        focusPosition = focusObject.transform.position;
-        Vector3 distance = focusPosition - (Vector2)transform.position;
-        if (distance.magnitude > followDistance)
+        if (GameController.menu.gameOver.activeSelf == false && GameController.menu.quitMenuAfterGameOver.activeSelf == false)
         {
-            Vector3 moveDistance = Vector2.ClampMagnitude(distance, distance.magnitude - followDistance);
-            transform.position += new Vector3(moveDistance.x, moveDistance.y, 0);
+            focusPosition = focusObject.transform.position;
+            Vector3 distance = focusPosition - (Vector2)transform.position;
+            if (distance.magnitude > followDistance)
+            {
+                Vector3 moveDistance = Vector2.ClampMagnitude(distance, distance.magnitude - followDistance);
+                transform.position += new Vector3(moveDistance.x, moveDistance.y, 0);
+            }
         }
-        //transform.position = new Vector3(focusPosition.x, focusPosition.y, transform.position.z);
     }
 }
