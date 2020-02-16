@@ -32,11 +32,7 @@ public class Character : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (innerCollider.IsTouching(GameObject.Find("Abyss").GetComponent<CompositeCollider2D>()))
-        {
-            
-            Debug.Log("Touched.");
-        }
+        OnTriggerEnter2D(boxCollider);
     }
 
 
@@ -100,4 +96,11 @@ public class Character : MonoBehaviour
         }
     }
 
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.name == "Abyss1" || collision.gameObject.name == "Abyss2" || collision.gameObject.name == "Abyss3")
+        {
+            GameController.menu.showGameOverScreen();
+        }
+    }
 }
