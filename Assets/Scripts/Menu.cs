@@ -35,14 +35,14 @@ public class Menu : MonoBehaviour
                     break;
             }
         }
-        quitMenu.SetActive(false);//wyłączenie menu wyjścia z gry
+        quitMenu.SetActive(false); //wyłączenie menu wyjścia z gry
         pauseMenu.SetActive(false);
         quitMenuAfterPause.SetActive(false);
         gameOver.SetActive(false);
         quitMenuAfterGameOver.SetActive(false);
-        Time.timeScale = 0; //zatrzymanie czasu
-        Cursor.visible = mainMenu.activeSelf; //odkrycie kursora myszy
-        //Cursor.lockState = CursorLockMode.Confined; //odblokowanie kursora myszy  TEMPORARY COMMENTED (everywhere below also)
+        Time.timeScale = 1;
+        if (mainMenu.activeSelf == true) Cursor.visible = true;
+        //Cursor.lockState = CursorLockMode.Confined; //odblokowanie kursora myszy  TEMPORARILY COMMENTED (everywhere below also)
     }
 
     // Update is called once per frame
@@ -52,6 +52,7 @@ public class Menu : MonoBehaviour
 
     public void btnPlayPressed()
     {
+        SceneManager.LoadScene(1);
         mainMenu.SetActive(false);
         Time.timeScale = 1; //włączenie czasu
         Cursor.visible = false; //ukrycie kursora
@@ -96,7 +97,7 @@ public class Menu : MonoBehaviour
         pauseMenu.SetActive(false);
         Cursor.visible = false;
         //Cursor.lockState = CursorLockMode.Locked;
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
         Time.timeScale = 1;
     }
 
@@ -113,7 +114,7 @@ public class Menu : MonoBehaviour
 
     public void btnCancelInQuitMenuAfterPause()
     {
-        pauseMenu.SetActive(true); //aktywania menu pauzy
+        pauseMenu.SetActive(true); //aktywacja menu pauzy
         quitMenuAfterPause.SetActive(false); //dezaktywacja menu wyjścia po pauzie
     }
 
