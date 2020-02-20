@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +13,10 @@ public class Menu : MonoBehaviour
     private GameObject mainMenu;
     public GameObject gameOver;
     public GameObject quitMenuAfterGameOver;
+    public GameObject bridgeScreen;
+    public GameObject bridgeScreenFadeOut;
+    public int activeScene;
+    private float delay = 0f;
 
     // Start is called before the first frame update
     void Start()
@@ -33,6 +38,18 @@ public class Menu : MonoBehaviour
                 case "QuitMenuAfterPause":
                     quitMenuAfterPause = child.gameObject; //pobranie menu wyjścia z gry po pauzie
                     break;
+                case "GameOver":
+                    gameOver = child.gameObject; //pobranie ekranu GameOver
+                    break;
+                case "QuitMenuAfterGameOver":
+                    quitMenuAfterGameOver = child.gameObject; //pobranie menu wyjścia z gry po GameOver
+                    break;
+                case "Bridge":
+                    bridgeScreen = child.gameObject; //pobranie ekranu przejścia między levelami
+                    break;
+                case "BridgeFadeOut":
+                    bridgeScreenFadeOut = child.gameObject; //jak wyżej - element ten został zduplikowany jedynie dla innej animacji
+                    break;
             }
         }
         quitMenu.SetActive(false); //wyłączenie menu wyjścia z gry
@@ -40,6 +57,8 @@ public class Menu : MonoBehaviour
         quitMenuAfterPause.SetActive(false);
         gameOver.SetActive(false);
         quitMenuAfterGameOver.SetActive(false);
+        bridgeScreen.SetActive(false);
+        bridgeScreenFadeOut.SetActive(false);
         Time.timeScale = 1;
         if (mainMenu.activeSelf == true) Cursor.visible = true;
         //Cursor.lockState = CursorLockMode.Confined; //odblokowanie kursora myszy  TEMPORARILY COMMENTED (everywhere below also)
@@ -48,10 +67,21 @@ public class Menu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (delay > 0)
+        {
+            delay -= Time.deltaTime;
+            if (delay <= 0)
+            {
+                delay = 0;
+                bridgeScreenFadeOut.SetActive(false);
+                SceneManager.LoadScene(activeScene);
+            }
+        }
     }
 
     public void btnPlayPressed()
     {
+        //activeScene = 1;
         SceneManager.LoadScene(1);
         mainMenu.SetActive(false);
         Time.timeScale = 1; //włączenie czasu
@@ -97,7 +127,9 @@ public class Menu : MonoBehaviour
         pauseMenu.SetActive(false);
         Cursor.visible = false;
         //Cursor.lockState = CursorLockMode.Locked;
-        SceneManager.LoadScene(1);
+        Scene scene = SceneManager.GetActiveScene();
+        activeScene = scene.buildIndex;
+        SceneManager.LoadScene(activeScene);
         Time.timeScale = 1;
     }
 
@@ -135,5 +167,22 @@ public class Menu : MonoBehaviour
     {
         quitMenuAfterGameOver.SetActive(false);
         gameOver.SetActive(true);
+    }
+
+    public void showBridgeScreen()
+    {
+        bridgeScreen.SetActive(true);
+        Cursor.visible = true;
+        //Cursor.lockState = CursorLockMode.Confined;
+    }
+
+    public void btnNextLevel()
+    {
+        Scene scene = SceneManager.GetActiveScene();
+        activeScene = scene.buildIndex;
+        activeScene++;
+        bridgeScreen.SetActive(false);
+        bridgeScreenFadeOut.SetActive(true);
+        delay = 2f; //wprowadzamy 2-sekundowe opóźnienie przed przejściem do następnego poziomu - patrz: void Update()
     }
 }

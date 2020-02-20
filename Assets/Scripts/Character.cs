@@ -98,9 +98,10 @@ public class Character : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.name == "Abyss1" || collision.gameObject.name == "Abyss2" || collision.gameObject.name == "Abyss3")
-        {
+        if (collision.gameObject.name == "Abyss1") 
             GameController.menu.showGameOverScreen();
-        }
+
+        if (collision.gameObject.name == "Passageway")
+            GameController.menu.showBridgeScreen();
     }
 }

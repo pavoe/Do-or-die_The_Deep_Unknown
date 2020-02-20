@@ -19,7 +19,7 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameController.menu.gameOver.activeSelf == false && GameController.menu.quitMenuAfterGameOver.activeSelf == false)
+        if (GameController.menu.gameOver.activeSelf == false && GameController.menu.quitMenuAfterGameOver.activeSelf == false && GameController.menu.bridgeScreen.activeSelf == false)
         {
             focusPosition = focusObject.transform.position;
             Vector3 distance = focusPosition - (Vector2)transform.position;
