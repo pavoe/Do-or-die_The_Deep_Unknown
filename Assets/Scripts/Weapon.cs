@@ -19,6 +19,6 @@ public class Weapon : MonoBehaviour
     /// </summary>
     public void Shoot()
     {
-                Instantiate(bulletPrefab, firePoint.position, firePoint.rotation); //chcemy jedynie zespawnować pocisk
+        Instantiate(bulletPrefab, firePoint.position, firePoint.rotation); //chcemy jedynie zespawnować pocisk
     }
 }
