@@ -14,21 +14,40 @@ public class AIController : MonoBehaviour
         for (int i = 0; i < GameObject.Find("Enemies").transform.childCount; i++)
         { 
            enemies.Add(GameObject.Find("Enemies").transform.GetChild(i).gameObject); 
-        } 
+        }
+        
+        ground = LayerMask.GetMask("Ground");
     }
 
-    // Update is called once per frame
+    
+    public float speed = 6f;
+    private Rigidbody2D rigidBody;
+    private LayerMask ground;
+    float enemywidth;
+    float distance;
+    float rayLength = 1f;
+    private BoxCollider2D boxCollider;
+    float Distance() //Only positive numbers
+    {
+        if (distance > 0)
+        {
+            return distance;
+        }
+        else
+            return -distance;
+    }
 
     void CheckLineOfFire(GameObject enemy)
     {
-        Vector3 direction = new Vector3();
+        Vector3 direction;
         Vector3 origin = enemy.transform.position;
 
-        if (enemy.transform.position.x > GameController.gameController.PC.transform.position.x) //sprawdza czy gracz jest po lewej czy prawej
+        if (enemy.transform.position.x > GameController.gameController.PC.transform.position.x) //Check if the player is on his left or right
         {
 
             enemy.transform.rotation = Quaternion.Euler(0,0,0);
             direction = Vector3.left;
+            
 
             origin -= (new Vector3(enemy.GetComponent<BoxCollider2D>().size.x, 0));
         }
@@ -36,19 +55,14 @@ public class AIController : MonoBehaviour
         {
             enemy.transform.rotation = Quaternion.Euler(0, 180, 0);
             direction = Vector3.right;
+            
             origin += (new Vector3(enemy.GetComponent<BoxCollider2D>().size.x, 0));
 
         }
 
         RaycastHit2D hitinfo = Physics2D.Raycast(origin, direction);
-
-        if(enemy.name=="Enemy1 (1)")
-        {
-            Debug.Log(hitinfo.collider);
-        }
-
-        //Tutaj Raycastować
-        if (hitinfo.transform.name=="Player") //zrobić to eleganciej
+        
+        if (hitinfo.transform.name=="Player") 
         {
             Debug.Log(enemy.name);
             enemy.GetComponent<Weapon>().Shoot();
@@ -56,52 +70,59 @@ public class AIController : MonoBehaviour
 
 
     }
-    
-    public float speed = 3f;
-    private Rigidbody2D rigidBody;
-    public Transform startPos, endPos;
-    private bool collision;
-    void Move()
-    {
-        rigidBody.velocity = new Vector2(transform.localScale.x, 0) * speed;
+   
+    void Move(GameObject enemy)
+    { 
+        Vector2 myvelocity = rigidBody.velocity;
+        myvelocity.x = -enemy.transform.right.x * speed;
+        rigidBody.velocity = myvelocity;
         
     }
-    void ChangeDirection()
+    
+    void ChangeDirection(GameObject enemy)
     {
-        collision = Physics2D.Linecast(startPos.position, endPos.position, 1 << LayerMask.NameToLayer("Ground"));
-        if (!collision)
+        Vector2 LinecastPos = enemy.transform.position - enemy.transform.right * enemywidth; 
+        Debug.DrawLine(LinecastPos, LinecastPos + Vector2.down);
+        Vector3 currentrotation = enemy.transform.eulerAngles;
+        if (currentrotation.y==180) //If the enemy is turned right
         {
-            Vector3 temp = transform.localScale;
-            if (temp.x == 1.0)
+            if (!Physics2D.Linecast(LinecastPos, LinecastPos + Vector2.down, ground)) //if the linecast on his right hits nothing (not the ground)
             {
-                temp.x = -1.0f;
+                currentrotation.y = 0; //the enemy turns left
             }
-            else
-                temp.x = 1.0f;
-            transform.localScale = temp;
         }
+        else //if the enemy is turned left
+        {
+            if (!Physics2D.Linecast(LinecastPos, LinecastPos + Vector2.down, ground)) //if the linecast on his left hits nothing
+            {
+                currentrotation.y = 180; //the enemy turns right
+            }
+        }
+        
+        enemy.transform.eulerAngles = currentrotation; //realization
     }
-   
-    //problemy: start pos i end pos ustawione dla wszystkich, rigidbody access do konkentnego (probkem, bo ten skrypt podpięty jest do gamecontrollera, a nie do wroga) i daltego get component tak działa
-    void FixedUpdate()
+  
+    void Update()
     {
         foreach (GameObject enemy in enemies)
         {
             rigidBody = enemy.GetComponent<Rigidbody2D>();
-            
-            //if (enemy.GetComponentInChildren<SpriteRenderer>().isVisible)
-            //{
-               
-            //    CheckLineOfFire(enemy);
-           // }
-            
-            Move();
-            ChangeDirection();
-            
-            
-            
-            //może tu spróbować umieścić to chodzenie
+            enemywidth = enemy.GetComponentInChildren<SpriteRenderer>().bounds.extents.x;
+            distance = enemy.transform.position.y - GameController.gameController.PC.transform.position.y;
+            boxCollider = enemy.GetComponent<BoxCollider2D>();
+            if (enemy.GetComponentInChildren<SpriteRenderer>().isVisible&&Distance()<2) //player notonly visible but also nearby in terms of y axis
+            {
 
+                CheckLineOfFire(enemy);
+            }
+            else //I think it is needed to calculate some distance because otherwise enemy wouldn't know what to do - if he should patrol or shoot.
+            {
+                Move(enemy);
+                ChangeDirection(enemy);
+            }
+            
+            //Debug.Log(enemy.name);
+            
         }
 
     }
