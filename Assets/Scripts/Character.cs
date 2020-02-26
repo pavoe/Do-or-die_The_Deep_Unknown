@@ -18,7 +18,7 @@ public class Character : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        
         //TEMPORARY FOR TESTING
         HP = 100;
 
@@ -32,8 +32,7 @@ public class Character : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-      
-       
+        OnTriggerEnter2D(boxCollider);
     }
 
 
@@ -51,7 +50,8 @@ public class Character : MonoBehaviour
     /// </summary>
     public void Jump()
     {
-        if (isGrounded() && innerCollider.IsTouching(GameObject.Find("Environment").GetComponent<CompositeCollider2D>()))
+        if (isGrounded() && (innerCollider.IsTouching(GameObject.Find("Environment").GetComponent<CompositeCollider2D>())
+            || innerCollider.IsTouching(GameObject.Find("Platforms").GetComponent<CompositeCollider2D>())))
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
         }
@@ -96,4 +96,12 @@ public class Character : MonoBehaviour
         }
     }
 
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.name == "Abyss1") 
+            GameController.menu.showGameOverScreen();
+
+        if (collision.gameObject.name == "Passageway")
+            GameController.menu.showBridgeScreen();
+    }
 }

@@ -20,7 +20,7 @@ public class AIController : MonoBehaviour
     }
 
     
-    public float speed = 6f;
+    public float speed = 3f;
     private Rigidbody2D rigidBody;
     private LayerMask ground;
     float enemywidth;
@@ -42,21 +42,18 @@ public class AIController : MonoBehaviour
         Vector3 direction;
         Vector3 origin = enemy.transform.position;
 
+        Debug.Log("Checking");
         if (enemy.transform.position.x > GameController.gameController.PC.transform.position.x) //Check if the player is on his left or right
         {
-
             enemy.transform.rotation = Quaternion.Euler(0,0,0);
             direction = Vector3.left;
-            
-
-            origin -= (new Vector3(enemy.GetComponent<BoxCollider2D>().size.x, 0));
+            origin -= (new Vector3(enemy.transform.localScale.x * enemy.GetComponent<BoxCollider2D>().size.x, 0)); 
         }
         else
         {
             enemy.transform.rotation = Quaternion.Euler(0, 180, 0);
             direction = Vector3.right;
-            
-            origin += (new Vector3(enemy.GetComponent<BoxCollider2D>().size.x, 0));
+            origin += (new Vector3(enemy.transform.localScale.x*enemy.GetComponent<BoxCollider2D>().size.x, 0));
 
         }
 
@@ -106,6 +103,7 @@ public class AIController : MonoBehaviour
     {
         foreach (GameObject enemy in enemies)
         {
+            
             rigidBody = enemy.GetComponent<Rigidbody2D>();
             enemywidth = enemy.GetComponentInChildren<SpriteRenderer>().bounds.extents.x;
             distance = enemy.transform.position.y - GameController.gameController.PC.transform.position.y;

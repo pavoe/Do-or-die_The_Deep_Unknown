@@ -14,7 +14,6 @@ public class KeyboardMouseController : MonoBehaviour
 	// FixedUpdate is called every fixed frame-rate frame, use it when using Rigidbody
 	private void FixedUpdate()
 	{
-        
     }
 
     bool shotingDelay = true;
@@ -22,8 +21,7 @@ public class KeyboardMouseController : MonoBehaviour
 	// Update is called once per frame
 	void Update()
     {
- 
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKey(KeyCode.W)||Input.GetKey(KeyCode.UpArrow))
         {
             GameController.gameController.PC.GetComponent<Character>().Jump();
         }
@@ -35,11 +33,11 @@ public class KeyboardMouseController : MonoBehaviour
         {
             GameController.gameController.PC.GetComponent<Weapon>().Shoot();
         }
-           
-
-
-        //if (Input.GetKey(KeyCode.Escape)) Application.Quit();
-      
+        
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            GameController.menu.showPauseMenu();
+        }
     }
     
     
