@@ -5,7 +5,7 @@ using UnityEngine;
 public class AIController : MonoBehaviour
 {
 
-    List<GameObject> enemies = new List<GameObject>(); //Jakoś inaczej tę deklarację klasy, enemy nie jest typem, więc trzeba inaczej (ale nie wiem jeszcze jak)
+    List<GameObject> enemies = new List<GameObject>(); 
     
 
     // Start is called before the first frame update
@@ -101,25 +101,31 @@ public class AIController : MonoBehaviour
   
     void Update()
     {
-        foreach (GameObject enemy in enemies)
+        
+        foreach (GameObject enemy in enemies.ToArray())
         {
-            
-            rigidBody = enemy.GetComponent<Rigidbody2D>();
-            enemywidth = enemy.GetComponentInChildren<SpriteRenderer>().bounds.extents.x;
-            distance = enemy.transform.position.y - GameController.gameController.PC.transform.position.y;
-            boxCollider = enemy.GetComponent<BoxCollider2D>();
-            if (enemy.GetComponentInChildren<SpriteRenderer>().isVisible&&Distance()<2) //player notonly visible but also nearby in terms of y axis
+            if (enemy == null)
             {
+                enemies.Remove(enemy);
+            }
+            else
+            {
+                rigidBody = enemy.GetComponent<Rigidbody2D>();
+                enemywidth = enemy.GetComponentInChildren<SpriteRenderer>().bounds.extents.x;
+                distance = enemy.transform.position.y - GameController.gameController.PC.transform.position.y;
+                boxCollider = enemy.GetComponent<BoxCollider2D>();
+                if (enemy.GetComponentInChildren<SpriteRenderer>().isVisible && Distance() < 2) //player notonly visible but also nearby in terms of y axis
+                {
 
-                CheckLineOfFire(enemy);
-            }
-            else //I think it is needed to calculate some distance because otherwise enemy wouldn't know what to do - if he should patrol or shoot.
-            {
-                Move(enemy);
-                ChangeDirection(enemy);
+                    CheckLineOfFire(enemy);
+                }
+                else //I think it is needed to calculate some distance because otherwise enemy wouldn't know what to do - if he should patrol or shoot.
+                {
+                    Move(enemy);
+                    ChangeDirection(enemy);
+                }
             }
             
-            //Debug.Log(enemy.name);
             
         }
 
