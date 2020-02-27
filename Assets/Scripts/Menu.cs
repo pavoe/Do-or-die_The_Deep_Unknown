@@ -5,10 +5,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+
 public class Menu : MonoBehaviour
 {
+    private float[] bestTimes = {45,65};
+    private int[] scoreLimit = { 7000, 8000 };
+
+
     public GameObject quitMenu;
-    public GameObject pauseMenu;
+    public GameObject pauseMenu { get; private set; }
     public GameObject quitMenuAfterPause;
     private GameObject mainMenu;
     public GameObject gameOver;
@@ -21,7 +26,11 @@ public class Menu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         GameController.menu = this;
+
+        activeScene = SceneManager.GetActiveScene().buildIndex;
+
         foreach (Transform child in transform)
         {
             switch (child.name)
@@ -52,6 +61,9 @@ public class Menu : MonoBehaviour
                     break;
             }
         }
+
+
+
         quitMenu.SetActive(false); //wyłączenie menu wyjścia z gry
         pauseMenu.SetActive(false);
         quitMenuAfterPause.SetActive(false);
@@ -61,6 +73,8 @@ public class Menu : MonoBehaviour
         bridgeScreenFadeOut.SetActive(false);
         Time.timeScale = 1;
         if (mainMenu.activeSelf == true) Cursor.visible = true;
+
+        
         //Cursor.lockState = CursorLockMode.Confined; //odblokowanie kursora myszy  TEMPORARILY COMMENTED (everywhere below also)
     }
 
@@ -81,7 +95,6 @@ public class Menu : MonoBehaviour
 
     public void btnPlayPressed()
     {
-        //activeScene = 1;
         SceneManager.LoadScene(1);
         mainMenu.SetActive(false);
         Time.timeScale = 1; //włączenie czasu
@@ -152,6 +165,7 @@ public class Menu : MonoBehaviour
 
     public void showGameOverScreen()
     {
+        
         gameOver.SetActive(true);
         Cursor.visible = true;
         //Cursor.lockState = CursorLockMode.Confined;
@@ -171,6 +185,58 @@ public class Menu : MonoBehaviour
 
     public void showBridgeScreen()
     {
+        int score=0;
+        if (GameController.Misses != 0)
+        {
+            float htmRatio = ((float)GameController.Hits) / GameController.Misses;
+            ((Text)bridgeScreen.transform.Find("hitToMissRatioNumber").GetComponent<Text>()).text = htmRatio.ToString();
+            score += Math.Min(5000, (int)(htmRatio*500));
+        }
+        else
+        {
+            ((Text)bridgeScreen.transform.Find("hitToMissRatioNumber").GetComponent<Text>()).text = "Perfect";
+            score += 5000;
+        }
+
+        float time = GameController.EndTime-GameController.StartTime;
+        
+
+        ((Text)bridgeScreen.transform.Find("killsNumber").GetComponent<Text>()).text=GameController.Kills.ToString();
+        score += GameController.Kills * 200;
+        ((Text)bridgeScreen.transform.Find("elapsedTimeNumber").GetComponent<Text>()).text = time.ToString()+" s";
+        score+=(3000 - ((int)(Math.Max(time-bestTimes[activeScene - 1], 0) * (5000/bestTimes[activeScene - 1]))));
+        string grade = "E";
+         if(scoreLimit[activeScene - 1]-score <= 0)
+        {
+            grade = "S++";
+        }
+        else if(scoreLimit[activeScene - 1] - score <= 1000)
+        {
+            grade = "S+";
+        }
+        else if (scoreLimit[activeScene - 1] - score <= 2000)
+        {
+            grade = "S";
+        }
+        else if (scoreLimit[activeScene - 1] - score <= 3000)
+        {
+            grade = "A";
+        }
+        else if (scoreLimit[activeScene - 1] - score <= 4000)
+        {
+            grade = "B";
+        }
+        else if (scoreLimit[activeScene - 1] - score <= 5000)
+        {
+            grade = "C";
+        }
+        else if (scoreLimit[activeScene - 1] - score <= 6000)
+        {
+            grade = "D";
+        }
+
+        ((Text)bridgeScreen.transform.Find("scoreNumber").GetComponent<Text>()).text = score.ToString() + " = " + grade;
+
         bridgeScreen.SetActive(true);
         Cursor.visible = true;
         //Cursor.lockState = CursorLockMode.Confined;

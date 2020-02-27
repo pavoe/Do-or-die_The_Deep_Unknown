@@ -13,7 +13,8 @@ public class AIController : MonoBehaviour
     {
         for (int i = 0; i < GameObject.Find("Enemies").transform.childCount; i++)
         { 
-           enemies.Add(GameObject.Find("Enemies").transform.GetChild(i).gameObject); 
+           enemies.Add(GameObject.Find("Enemies").transform.GetChild(i).gameObject);
+           enemies[i].transform.Find("ReloadArt").GetComponent<Renderer>().enabled = false;
         }
         
         ground = LayerMask.GetMask("Ground");
@@ -42,7 +43,7 @@ public class AIController : MonoBehaviour
         Vector3 direction;
         Vector3 origin = enemy.transform.position;
 
-        Debug.Log("Checking");
+        //Debug.Log("Checking");
         if (enemy.transform.position.x > GameController.gameController.PC.transform.position.x) //Check if the player is on his left or right
         {
             enemy.transform.rotation = Quaternion.Euler(0,0,0);
@@ -61,7 +62,7 @@ public class AIController : MonoBehaviour
         
         if (hitinfo.transform.name=="Player") 
         {
-            Debug.Log(enemy.name);
+            //Debug.Log(enemy.name);
             enemy.GetComponent<Weapon>().Shoot();
         }
 
@@ -78,24 +79,25 @@ public class AIController : MonoBehaviour
     
     void ChangeDirection(GameObject enemy)
     {
-        Vector2 LinecastPos = enemy.transform.position - enemy.transform.right * enemywidth; 
-        Debug.DrawLine(LinecastPos, LinecastPos + Vector2.down);
+        Vector2 LinecastPos = enemy.transform.position - enemy.transform.right*enemywidth*1.1f; 
+        Debug.DrawLine(LinecastPos, LinecastPos + new Vector2(0, -1.1f));
         Vector3 currentrotation = enemy.transform.eulerAngles;
-        if (currentrotation.y==180) //If the enemy is turned right
+
+
+        
+        if (!Physics2D.Linecast(LinecastPos, LinecastPos + new Vector2(0,-1.1f), ground) || Physics2D.Linecast(LinecastPos, LinecastPos,ground)) //if the linecast on his right hits nothing (not the ground)
         {
-            if (!Physics2D.Linecast(LinecastPos, LinecastPos + Vector2.down, ground)) //if the linecast on his right hits nothing (not the ground)
+            if (currentrotation.y == 180) //If the enemy is turned right
             {
                 currentrotation.y = 0; //the enemy turns left
             }
-        }
-        else //if the enemy is turned left
-        {
-            if (!Physics2D.Linecast(LinecastPos, LinecastPos + Vector2.down, ground)) //if the linecast on his left hits nothing
+            else
             {
-                currentrotation.y = 180; //the enemy turns right
+                currentrotation.y = 180;
             }
+            
         }
-        
+
         enemy.transform.eulerAngles = currentrotation; //realization
     }
   
@@ -111,7 +113,7 @@ public class AIController : MonoBehaviour
             else
             {
                 rigidBody = enemy.GetComponent<Rigidbody2D>();
-                enemywidth = enemy.GetComponentInChildren<SpriteRenderer>().bounds.extents.x;
+                enemywidth = enemy.GetComponentInChildren<BoxCollider2D>().bounds.extents.x;
                 distance = enemy.transform.position.y - GameController.gameController.PC.transform.position.y;
                 boxCollider = enemy.GetComponent<BoxCollider2D>();
                 if (enemy.GetComponentInChildren<SpriteRenderer>().isVisible && Distance() < 2) //player notonly visible but also nearby in terms of y axis
@@ -123,6 +125,11 @@ public class AIController : MonoBehaviour
                 {
                     Move(enemy);
                     ChangeDirection(enemy);
+                }
+
+                if (enemy.GetComponent<Weapon>().Ammo == 0&&!enemy.GetComponent<Weapon>().Reloading)
+                {
+                    enemy.GetComponent<Weapon>().Reload();
                 }
             }
             
