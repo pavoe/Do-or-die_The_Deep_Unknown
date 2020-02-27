@@ -25,7 +25,7 @@ public class AIController : MonoBehaviour
     private LayerMask ground;
     float enemywidth;
     float distance;
-    float rayLength = 1f;
+    
     private BoxCollider2D boxCollider;
     float Distance() //Only positive numbers
     {
