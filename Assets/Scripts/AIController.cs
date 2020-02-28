@@ -17,10 +17,10 @@ public class AIController : MonoBehaviour
         }
         
         ground = LayerMask.GetMask("Ground");
+        
     }
-
-    
-    public float speed = 3f;
+    public Animator animator;
+    float speed = 2f;
     private Rigidbody2D rigidBody;
     private LayerMask ground;
     float enemywidth;
@@ -36,6 +36,7 @@ public class AIController : MonoBehaviour
         else
             return -distance;
     }
+   
 
     void CheckLineOfFire(GameObject enemy)
     {
@@ -79,18 +80,18 @@ public class AIController : MonoBehaviour
     void ChangeDirection(GameObject enemy)
     {
         Vector2 LinecastPos = enemy.transform.position - enemy.transform.right * enemywidth; 
-        Debug.DrawLine(LinecastPos, LinecastPos + Vector2.down);
+        Debug.DrawLine(LinecastPos, LinecastPos + 1.3f*Vector2.down);
         Vector3 currentrotation = enemy.transform.eulerAngles;
         if (currentrotation.y==180) //If the enemy is turned right
         {
-            if (!Physics2D.Linecast(LinecastPos, LinecastPos + Vector2.down, ground)) //if the linecast on his right hits nothing (not the ground)
+            if (!Physics2D.Linecast(LinecastPos, LinecastPos + 1.3f*Vector2.down, ground)) //if the linecast on his right hits nothing (not the ground)
             {
                 currentrotation.y = 0; //the enemy turns left
             }
         }
         else //if the enemy is turned left
         {
-            if (!Physics2D.Linecast(LinecastPos, LinecastPos + Vector2.down, ground)) //if the linecast on his left hits nothing
+            if (!Physics2D.Linecast(LinecastPos, LinecastPos + 1.3f*Vector2.down, ground)) //if the linecast on his left hits nothing
             {
                 currentrotation.y = 180; //the enemy turns right
             }
@@ -101,7 +102,7 @@ public class AIController : MonoBehaviour
   
     void Update()
     {
-        
+
         foreach (GameObject enemy in enemies.ToArray())
         {
             if (enemy == null)
@@ -110,13 +111,13 @@ public class AIController : MonoBehaviour
             }
             else
             {
+                
                 rigidBody = enemy.GetComponent<Rigidbody2D>();
                 enemywidth = enemy.GetComponentInChildren<SpriteRenderer>().bounds.extents.x;
                 distance = enemy.transform.position.y - GameController.gameController.PC.transform.position.y;
                 boxCollider = enemy.GetComponent<BoxCollider2D>();
                 if (enemy.GetComponentInChildren<SpriteRenderer>().isVisible && Distance() < 2) //player notonly visible but also nearby in terms of y axis
                 {
-
                     CheckLineOfFire(enemy);
                 }
                 else //I think it is needed to calculate some distance because otherwise enemy wouldn't know what to do - if he should patrol or shoot.
