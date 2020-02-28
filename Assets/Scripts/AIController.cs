@@ -86,7 +86,7 @@ public class AIController : MonoBehaviour
 
 
         
-        if (!Physics2D.Linecast(LinecastPos, LinecastPos + new Vector2(0,-1.1f), ground) || Physics2D.Linecast(LinecastPos, LinecastPos,ground)) //if the linecast on his right hits nothing (not the ground)
+        if (!Physics2D.Linecast(LinecastPos, LinecastPos + new Vector2(0,-1.1f), ground) || Physics2D.Linecast(LinecastPos, LinecastPos,ground)||Physics2D.Linecast(LinecastPos,LinecastPos+new Vector2(0,1.1f),ground)) //if the linecast on his right hits nothing (not the ground)
         {
             if (currentrotation.y == 180) //If the enemy is turned right
             {
@@ -105,10 +105,11 @@ public class AIController : MonoBehaviour
     void Update()
     {
 
-        foreach (GameObject enemy in enemies.ToArray())
+        foreach (GameObject enemy in enemies)
         {
             if (enemy == null)
             {
+                
                 enemies.Remove(enemy);
             }
             else
@@ -120,6 +121,7 @@ public class AIController : MonoBehaviour
                 boxCollider = enemy.GetComponent<BoxCollider2D>();
                 if (enemy.GetComponentInChildren<SpriteRenderer>().isVisible && Distance() < 2) //player notonly visible but also nearby in terms of y axis
                 {
+                    Debug.Log("Checking LOF");
                     CheckLineOfFire(enemy);
                 }
                 else //I think it is needed to calculate some distance because otherwise enemy wouldn't know what to do - if he should patrol or shoot.
