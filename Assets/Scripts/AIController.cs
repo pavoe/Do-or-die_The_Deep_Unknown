@@ -18,10 +18,10 @@ public class AIController : MonoBehaviour
         }
         
         ground = LayerMask.GetMask("Ground");
+        
     }
-
-    
-    public float speed = 3f;
+    public Animator animator;
+    float speed = 2f;
     private Rigidbody2D rigidBody;
     private LayerMask ground;
     float enemywidth;
@@ -37,6 +37,7 @@ public class AIController : MonoBehaviour
         else
             return -distance;
     }
+   
 
     void CheckLineOfFire(GameObject enemy)
     {
@@ -103,7 +104,7 @@ public class AIController : MonoBehaviour
   
     void Update()
     {
-        
+
         foreach (GameObject enemy in enemies.ToArray())
         {
             if (enemy == null)
@@ -112,13 +113,13 @@ public class AIController : MonoBehaviour
             }
             else
             {
+                
                 rigidBody = enemy.GetComponent<Rigidbody2D>();
                 enemywidth = enemy.GetComponentInChildren<BoxCollider2D>().bounds.extents.x;
                 distance = enemy.transform.position.y - GameController.gameController.PC.transform.position.y;
                 boxCollider = enemy.GetComponent<BoxCollider2D>();
                 if (enemy.GetComponentInChildren<SpriteRenderer>().isVisible && Distance() < 2) //player notonly visible but also nearby in terms of y axis
                 {
-
                     CheckLineOfFire(enemy);
                 }
                 else //I think it is needed to calculate some distance because otherwise enemy wouldn't know what to do - if he should patrol or shoot.
