@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Character : MonoBehaviour
 {
@@ -21,7 +22,15 @@ public class Character : MonoBehaviour
 
     //USE "I" to activate invincible mode;
     public bool INVINCIBLECHEAT = false;
-    
+
+
+    [Header("Events")]
+    [Space]
+    public UnityEvent OnLandEvent;
+    [System.Serializable]
+    public class BoolEvent : UnityEvent<bool> { }
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -35,7 +44,10 @@ public class Character : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
         //innerCollider = transform.Find("InnerCollider").GetComponent<BoxCollider2D>();
-   
+
+        if (OnLandEvent == null)
+        { OnLandEvent = new UnityEvent(); }
+
     }
 
     // Update is called once per frame
@@ -45,7 +57,10 @@ public class Character : MonoBehaviour
         {
             shiftSlowDownDelay -= Time.deltaTime;
         }
-        
+        if (isGrounded()==true)
+        {
+            OnLandEvent.Invoke();
+        }
        
     }
 
