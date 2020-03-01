@@ -39,7 +39,7 @@ public class AnimController : MonoBehaviour
     bool jump = false;
     void PlayerJump()
     {
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetKey(KeyCode.W))
         {
             jump = true;
             animator.SetBool("IsJumping", true);
