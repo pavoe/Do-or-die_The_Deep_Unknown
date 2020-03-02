@@ -20,6 +20,8 @@ public class Menu : MonoBehaviour
     public GameObject quitMenuAfterGameOver;
     public GameObject bridgeScreen;
     public GameObject bridgeScreenFadeOut;
+    public GameObject controlsScreen;
+    public GameObject controlsScreenAfterPause;
     public int activeScene;
     private float delay = 0f;
 
@@ -59,6 +61,12 @@ public class Menu : MonoBehaviour
                 case "BridgeFadeOut":
                     bridgeScreenFadeOut = child.gameObject; //jak wyżej - element ten został zduplikowany jedynie dla innej animacji
                     break;
+                case "ControlsScreen":
+                    controlsScreen = child.gameObject;  //pobranie ekranu Controls
+                    break;
+                case "ControlsScreenAfterPause":
+                    controlsScreenAfterPause = child.gameObject;  //pobranie ekranu Controls po pauzie
+                    break;
             }
         }
 
@@ -71,6 +79,8 @@ public class Menu : MonoBehaviour
         quitMenuAfterGameOver.SetActive(false);
         bridgeScreen.SetActive(false);
         bridgeScreenFadeOut.SetActive(false);
+        controlsScreen.SetActive(false);
+        controlsScreenAfterPause.SetActive(false);
         Time.timeScale = 1;
         if (mainMenu.activeSelf == true) Cursor.visible = true;
 
@@ -250,5 +260,29 @@ public class Menu : MonoBehaviour
         bridgeScreen.SetActive(false);
         bridgeScreenFadeOut.SetActive(true);
         delay = 2f; //wprowadzamy 2-sekundowe opóźnienie przed przejściem do następnego poziomu - patrz: void Update()
+    }
+
+    public void btnControls()   //gdy naciśniemy przycisk Controls w menu głównym
+    {
+        controlsScreen.SetActive(true);
+        mainMenu.SetActive(false);
+    }
+
+    public void btnBackInControls() //gdy naciśniemy przycisk Back w Controls
+    {
+        mainMenu.SetActive(true);
+        controlsScreen.SetActive(false);
+    }
+
+    public void btnControlsAfterPause() //gdy naciśniemy przycisk Controls w menu pauzy
+    {
+        controlsScreenAfterPause.SetActive(true);
+        pauseMenu.SetActive(false);
+    }
+
+    public void btnBackInControlsAfterPause() //gdy naciśniemy przycisk Back w Controls po pauzie
+    {
+        pauseMenu.SetActive(true);
+        controlsScreenAfterPause.SetActive(false);
     }
 }
