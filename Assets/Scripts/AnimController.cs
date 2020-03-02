@@ -41,8 +41,12 @@ public class AnimController : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.W))
         {
-            jump = true;
-            animator.SetBool("IsJumping", true);
+            if (gameObject.name=="Player")
+            {
+                jump = true;
+                animator.SetBool("IsJumping", true);
+            }
+            
         }
     }
     public void OnLanding()
